@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/MaXoS-Agent/OpenMausBot/bridge/handoff.schema.json",
+  "title": "DualDeskHandoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "source", "brief"],
+  "properties": {
+    "version": { "const": 1 },
+    "source": { "enum": ["local", "cloud"] },
+    "brief": { "type": "string", "maxLength": 2000 },
+    "constraints": {
+      "type": "array",
+      "items": { "type": "string", "maxLength": 240 },
+      "maxItems": 12
+    },
+    "files": {
+      "type": "array",
+      "items": { "type": "string", "maxLength": 240 },
+      "maxItems": 24
+    },
+    "github": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "repo": { "type": "string" },
+        "kind": { "enum": ["issue", "pull", "commit"] },
+        "number": { "type": "integer" },
+        "sha": { "type": "string" },
+        "url": { "type": "string" }
+      }
+    },
+    "local": {
+      "type": "object",
+      "properties": {
+        "agent": { "enum": ["atlas", "forge", "sentinel"] },
+        "plan": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    },
+    "cloud": {
+      "type": "object",
+      "properties": {
+        "agent": { "enum": ["vesper", "scout", "quill"] },
+        "analysis": { "type": "string" },
+        "deliverable": { "type": "string" },
+        "next": { "type": "string" }
+      }
+    },
+    "board": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["title", "lane", "owner"],
+        "properties": {
+          "title": { "type": "string" },
+          "detail": { "type": "string" },
+          "lane": { "enum": ["inbox", "local", "cloud", "review", "done"] },
+          "owner": {
+            "enum": ["atlas", "forge", "sentinel", "vesper", "scout", "quill"]
+          }
+        }
+      }
+    }
+  }
+}
